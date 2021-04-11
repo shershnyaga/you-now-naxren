@@ -1,77 +1,47 @@
-from PyQt5.QtWidgets import *
-import os
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PIL import Image, ImageFilter
+from pygame import *
 
-app = QApplication([])
-main_win = QWidget()
-list1 = QListWidget(main_win)
-#list2 = QListWidget(main_win)
-labe = QLabel(main_win)
-labe.move(360,40)
-labe.resize(360,340)
-knopka = QPushButton(main_win)
-knopka.move(500,300)
-knopka.setText('Обзор')
-sdir = ''
-putj = ""
-
-knopka1 = QPushButton(main_win)
-knopka1.move(10,400)
-knopka1.setText('cherno')
-
-
-
-knopka2 = QPushButton(main_win)
-knopka2.move(100,400)
-knopka2.setText('razmito')
-def f1():
-    global sdir
-    sdir = QFileDialog.getExistingDirectory()
-    exty = ['.jpg', '.jpeg', 'png', '.bmp', 'gif' ]
-    files = os.listdir(sdir)
-    files2 = filtr(files,exty)
-    list1.clear()
-    for f in files2:
-        list1.addItem(f)
-        
-knopka.clicked.connect(f1)
-
-
-def filtr(files, extens):   
-    result = []
-    for f in files:
-        for ext in extens:
-            if f.endswith(ext):
-                result.append(f)
-    return result
-
-def loader():
-    global wdir, putj, sdir
-    f = list1.currentItem().text()
-    putj = os.path.join(sdir, f)
-    image = Image.open(putj)
-    pix = QPixmap(putj)
-    labe.setPixmap(pix)
-    #w = image.width
-    #h = image.height()
-list1.currentRowChanged.connect(loader)
-
-
-def HB():
-    global wdir, putj, sdir
-    imag = Image.open(putj)
-    HB1 = imag.convert('L')
-    itog = sdir + 'changed.jpg'
-    HB1.save(itog)
-    pix = QPixmap(itog)
-    pix = pix.scaled(300,300,Qt.KeepAspectRatio)
-    labe.resize(300,300)
-    labe.setPixmap(pix)
-knopka1.clicked.connect(HB)
-
-
-
-main_win.show()
-app.exec_()
+scr = display.set_mode((700,500))
+background = transform.scale(image.load("background.png"),(700,500))
+hero = transform.scale(image.load("sprite1.png"),(100,100))
+hero2 = transform.scale(image.load("sprite2.png"),(100,100))
+game = True
+clock = time.Clock()
+FPS = 60
+x1 = 150
+y1= 150
+while game:
+    #scr.fill((50,50,150))
+        scr.blit(background,(0,0))
+        scr.blit(hero,(x1,y1))
+        for e in event.get():
+            if e.type == QUIT:
+                game = False
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_LEFT]:
+            x1 -= 5
+        if keys_pressed[K_RIGHT]:
+            x1 += 5
+        if keys_pressed[K_UP]:
+            y1 -= 5
+        if keys_pressed[K_DOWN]:
+            y1 += 5
+        display.update()
+        clock.tick(FPS)
+        while game:
+    #scr.fill((50,50,150))
+            scr.blit(background,(0,0))
+        scr.blit(hero,(x1,y1))
+        for e in event.get():
+            if e.type ==    QUIT:
+                game = False
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_LEFT]:
+            x1 -= 5
+        if keys_pressed[K_RIGHT]:
+            x1 += 5
+        if keys_pressed[K_UP]:
+            y1 -= 5
+        if keys_pressed[K_DOWN]:
+            y1 += 5
+        display.update()
+        clock.tick(FPS)
